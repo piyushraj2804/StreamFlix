@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StreamFlix – Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+</head>
+<body class="auth-page">
+
+  <!-- Background -->
+  <div class="auth-bg">
+    <img src="https://image.tmdb.org/t/p/original/rcA35Vs8ohONFkbRhpJpSKzJODj.jpg" alt="StreamFlix" onerror="this.src='https://image.tmdb.org/t/p/original/iopYFB1b6Bh7FWZh3onQhph1sih.jpg'"/>
+    <div class="auth-bg-overlay"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="auth-nav">
+    <a class="logo" href="login.html">StreamFlix</a>
+    <div class="auth-nav-right">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+    </div>
+  </nav>
+
+  <!-- Auth Card -->
+  <main class="auth-main">
+    <div class="auth-card" id="authCard">
+
+      <!-- Sign In Form -->
+      <div class="auth-form" id="signinForm">
+        <h1 class="auth-title">Sign In</h1>
+        <div class="form-group">
+          <input type="email" id="siEmail" class="form-input" placeholder=" " autocomplete="email"/>
+          <label class="form-label">Email or phone number</label>
+          <span class="form-error" id="siEmailErr"></span>
+        </div>
+        <div class="form-group">
+          <input type="password" id="siPassword" class="form-input" placeholder=" " autocomplete="current-password"/>
+          <label class="form-label">Password</label>
+          <span class="form-error" id="siPassErr"></span>
+          <button class="show-pass-btn" data-target="siPassword">Show</button>
+        </div>
+        <button class="auth-btn" id="signinBtn">Sign In</button>
+        <div class="auth-meta">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe"/> Remember me
+          </label>
+          <a href="#" class="auth-link">Need help?</a>
+        </div>
+        <div class="auth-divider"><span>OR</span></div>
+        <button class="auth-btn auth-btn-secondary" id="guestBtn">Continue as Guest</button>
+        <p class="auth-switch">
+          New to StreamFlix?
+          <a href="#" class="auth-link" id="goSignup">Sign up now</a>
+        </p>
+        <p class="auth-fine-print">
+          This page is protected by Google reCAPTCHA to ensure you're not a bot.
+          <a href="#" class="auth-link">Learn more.</a>
+        </p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div class="auth-form hidden" id="signupForm">
+        <h1 class="auth-title">Sign Up</h1>
+        <div class="form-group">
+          <input type="text" id="suName" class="form-input" placeholder=" "/>
+          <label class="form-label">Full name</label>
+          <span class="form-error" id="suNameErr"></span>
+        </div>
+        <div class="form-group">
+          <input type="email" id="suEmail" class="form-input" placeholder=" "/>
+          <label class="form-label">Email</label>
+          <span class="form-error" id="suEmailErr"></span>
+        </div>
+        <div class="form-group">
+          <input type="password" id="suPassword" class="form-input" placeholder=" "/>
+          <label class="form-label">Password (min 6 characters)</label>
+          <span class="form-error" id="suPassErr"></span>
+          <button class="show-pass-btn" data-target="suPassword">Show</button>
+        </div>
+        <!-- Password Strength -->
+        <div class="strength-wrap">
+          <div class="strength-bar">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+          <span class="strength-label" id="strengthLabel"></span>
+        </div>
+        <div class="form-group">
+          <input type="password" id="suConfirm" class="form-input" placeholder=" "/>
+          <label class="form-label">Confirm password</label>
+          <span class="form-error" id="suConfErr"></span>
+        </div>
+        <button class="auth-btn" id="signupBtn">Create Account</button>
+        <p class="auth-switch">
+          Already have an account?
+          <a href="#" class="auth-link" id="goSignin">Sign in</a>
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="auth.js"></script>
+</body>
+</html>

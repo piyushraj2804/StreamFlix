@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StreamFlix – Watch Everywhere</title>
+  <meta name="description" content="StreamFlix – Stream movies and TV shows anytime, anywhere."/>
+  <meta name="theme-color" content="#E50914"/>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav id="navbar">
+    <div class="nav-left">
+      <a class="logo" href="#/">StreamFlix</a>
+      <ul class="nav-links">
+        <li><a href="#/" data-route="home" class="nav-link active">Home</a></li>
+        <li><a href="#/tv" data-route="tv" class="nav-link">TV Shows</a></li>
+        <li><a href="#/movies" data-route="movies" class="nav-link">Movies</a></li>
+        <li><a href="#/new" data-route="new" class="nav-link">New &amp; Popular</a></li>
+        <li><a href="#/mylist" data-route="mylist" class="nav-link">My List</a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <div class="nav-search" id="navSearch">
+        <input type="text" placeholder="Search titles, genres…" id="searchInput" autocomplete="off" aria-label="Search"/>
+        <svg class="search-icon" id="searchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+      <div class="notif-btn" id="notifBtn" title="Notifications">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot" id="notifDot"></span>
+      </div>
+      <div class="avatar-wrap">
+        <div class="avatar" id="avatarBtn">U</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <div class="profile-info">
+            <div class="pd-avatar">U</div>
+            <div>
+              <div class="pd-name" id="pdName">Guest User</div>
+              <div class="pd-email" id="pdEmail">guest@streamflix.com</div>
+            </div>
+          </div>
+          <div class="pd-divider"></div>
+          <a href="#/mylist" class="pd-item">❤️ My List</a>
+          <a href="#" class="pd-item" id="pdToggleTheme">🌙 Dark Mode</a>
+          <div class="pd-divider"></div>
+          <a href="login.html" class="pd-item pd-signout" id="signoutBtn">Sign Out</a>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <ul>
+      <li><a href="#/" data-route="home">🏠 Home</a></li>
+      <li><a href="#/tv" data-route="tv">📺 TV Shows</a></li>
+      <li><a href="#/movies" data-route="movies">🎬 Movies</a></li>
+      <li><a href="#/new" data-route="new">✨ New &amp; Popular</a></li>
+      <li><a href="#/mylist" data-route="mylist">❤️ My List</a></li>
+    </ul>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content" id="heroContent">
+      <!-- Skeleton -->
+      <div class="hero-skeleton" id="heroSkeleton">
+        <div class="sk sk-badge"></div>
+        <div class="sk sk-title"></div>
+        <div class="sk sk-title sk-title-sm"></div>
+        <div class="sk sk-meta"></div>
+        <div class="sk sk-desc"></div>
+        <div class="sk sk-desc sk-desc-sm"></div>
+        <div class="sk sk-actions"></div>
+      </div>
+      <!-- Real content (hidden until loaded) -->
+      <div id="heroReal" class="hidden">
+        <div class="hero-badge"><span class="live-dot"></span><span>#1 in Trending Today</span></div>
+        <h1 class="hero-title" id="heroTitle">Loading…</h1>
+        <div class="hero-meta">
+          <span class="match" id="heroMatch">-</span>
+          <span class="bullet">•</span>
+          <span id="heroYear">-</span>
+          <span class="bullet">•</span>
+          <span class="rating-badge" id="heroRating">-</span>
+          <span class="bullet">•</span>
+          <span id="heroGenre">-</span>
+        </div>
+        <p class="hero-desc" id="heroDesc">-</p>
+        <div class="hero-actions">
+          <button class="btn btn-play" id="heroPlay">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            Play
+          </button>
+          <button class="btn btn-info" id="heroInfo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            More Info
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-maturity" id="heroMaturity">PG-13</div>
+  </section>
+
+  <!-- ══ GENRE TABS ══ -->
+  <div class="genre-tabs-wrap">
+    <div class="genre-tabs" id="genreTabs">
+      <button class="genre-tab active" data-genre="All">All</button>
+      <button class="genre-tab" data-genre="Action">Action</button>
+      <button class="genre-tab" data-genre="Drama">Drama</button>
+      <button class="genre-tab" data-genre="Comedy">Comedy</button>
+      <button class="genre-tab" data-genre="Science Fiction">Sci-Fi</button>
+      <button class="genre-tab" data-genre="Horror">Horror</button>
+      <button class="genre-tab" data-genre="Thriller">Thriller</button>
+      <button class="genre-tab" data-genre="Romance">Romance</button>
+      <button class="genre-tab" data-genre="Animation">Animation</button>
+      <button class="genre-tab" data-genre="Documentary">Documentary</button>
+      <button class="genre-tab" data-genre="Crime">Crime</button>
+      <button class="genre-tab" data-genre="Fantasy">Fantasy</button>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <main id="mainContent">
+
+    <!-- Page Views (routed) -->
+    <div id="view-home">
+
+      <!-- Continue Watching -->
+      <section class="row-section" id="sec-continue">
+        <div class="section-header">
+          <h2 class="section-title">Continue Watching <span class="title-tag">▶ Resume</span></h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="cwRow">&#8249;</button>
+          <div class="row" id="cwRow"></div>
+          <button class="row-btn row-btn-right" data-target="cwRow">&#8250;</button>
+        </div>
+      </section>
+
+      <!-- Trending -->
+      <section class="row-section" id="sec-trend">
+        <div class="section-header">
+          <h2 class="section-title">🔥 Trending Now</h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="trendRow">&#8249;</button>
+          <div class="row" id="trendRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="trendRow">&#8250;</button>
+        </div>
+      </section>
+
+      <!-- Top 10 -->
+      <section class="row-section" id="sec-top10">
+        <div class="section-header">
+          <h2 class="section-title">Top 10 in Your Country</h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="top10Row">&#8249;</button>
+          <div class="row" id="top10Row"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="top10Row">&#8250;</button>
+        </div>
+      </section>
+
+      <!-- Featured Banner -->
+      <div class="featured-banner" id="featuredBanner">
+        <div class="sk sk-banner"></div>
+      </div>
+
+      <!-- Popular Movies -->
+      <section class="row-section" id="sec-popular">
+        <div class="section-header">
+          <h2 class="section-title">🎬 Popular Movies</h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="popularRow">&#8249;</button>
+          <div class="row" id="popularRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="popularRow">&#8250;</button>
+        </div>
+      </section>
+
+      <!-- Top Rated -->
+      <section class="row-section" id="sec-toprated">
+        <div class="section-header">
+          <h2 class="section-title">⭐ Top Rated</h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="topratedRow">&#8249;</button>
+          <div class="row" id="topratedRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="topratedRow">&#8250;</button>
+        </div>
+      </section>
+
+      <!-- Action Movies -->
+      <section class="row-section" id="sec-action">
+        <div class="section-header">
+          <h2 class="section-title">💥 Action &amp; Adventure</h2>
+          <span class="see-all">See All</span>
+        </div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="actionRow">&#8249;</button>
+          <div class="row" id="actionRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="actionRow">&#8250;</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- TV Shows view -->
+    <div id="view-tv" class="hidden">
+      <div class="page-hero-banner" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+        <h2>📺 TV Shows</h2><p>Binge-worthy series from around the world</p>
+      </div>
+      <section class="row-section visible">
+        <div class="section-header"><h2 class="section-title">Popular TV Shows</h2></div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="tvRow">&#8249;</button>
+          <div class="row" id="tvRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="tvRow">&#8250;</button>
+        </div>
+      </section>
+      <section class="row-section visible">
+        <div class="section-header"><h2 class="section-title">Top Rated Shows</h2></div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="tvTopRow">&#8249;</button>
+          <div class="row" id="tvTopRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="tvTopRow">&#8250;</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Movies view -->
+    <div id="view-movies" class="hidden">
+      <div class="page-hero-banner" style="background:linear-gradient(135deg,#1a0a00,#3d0000)">
+        <h2>🎬 Movies</h2><p>Blockbusters, classics, and hidden gems</p>
+      </div>
+      <section class="row-section visible">
+        <div class="section-header"><h2 class="section-title">Now Playing</h2></div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="movNowRow">&#8249;</button>
+          <div class="row" id="movNowRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="movNowRow">&#8250;</button>
+        </div>
+      </section>
+      <section class="row-section visible">
+        <div class="section-header"><h2 class="section-title">Upcoming</h2></div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="movUpRow">&#8249;</button>
+          <div class="row" id="movUpRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="movUpRow">&#8250;</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- New & Popular view -->
+    <div id="view-new" class="hidden">
+      <div class="page-hero-banner" style="background:linear-gradient(135deg,#001a0a,#003d1a)">
+        <h2>✨ New &amp; Popular</h2><p>Fresh releases this week</p>
+      </div>
+      <section class="row-section visible">
+        <div class="section-header"><h2 class="section-title">Latest Releases</h2></div>
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="newRow">&#8249;</button>
+          <div class="row" id="newRow"><div class="sk-row"></div></div>
+          <button class="row-btn row-btn-right" data-target="newRow">&#8250;</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- My List view -->
+    <div id="view-mylist" class="hidden">
+      <div class="page-hero-banner" style="background:linear-gradient(135deg,#1a001a,#3d003d)">
+        <h2>❤️ My List</h2><p>Your saved titles</p>
+      </div>
+      <section class="row-section visible" id="myListSection">
+        <div class="row-wrap">
+          <button class="row-btn row-btn-left" data-target="myListRow">&#8249;</button>
+          <div class="row" id="myListRow"></div>
+          <button class="row-btn row-btn-right" data-target="myListRow">&#8250;</button>
+        </div>
+        <div class="empty-state" id="emptyMyList">
+          <div class="empty-icon">💔</div>
+          <h3>Your list is empty</h3>
+          <p>Browse movies and shows and click + to add them here.</p>
+          <button class="btn btn-play" onclick="navigate('home')">Browse Now</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Search Results view -->
+    <div id="view-search" class="hidden">
+      <div class="page-hero-banner" style="background:linear-gradient(135deg,#0a0a1a,#1a1a3d)">
+        <h2 id="searchHeading">Search Results</h2>
+        <p id="searchSubheading">Searching…</p>
+      </div>
+      <section class="row-section visible">
+        <div class="row-wrap">
+          <div class="search-grid" id="searchGrid"></div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer id="siteFooter">
+    <div class="footer-social">
+      <a href="#" aria-label="Facebook">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="#" aria-label="Twitter">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      </a>
+      <a href="#" aria-label="YouTube">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.95C18.88 4 12 4 12 4s-6.88 0-8.59.47A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Audio Description</a><a href="#">Help Center</a>
+      <a href="#">Gift Cards</a><a href="#">Media Center</a>
+      <a href="#">Investor Relations</a><a href="#">Jobs</a>
+      <a href="#">Terms of Use</a><a href="#">Privacy</a>
+      <a href="#">Legal Notices</a><a href="#">Cookie Preferences</a>
+      <a href="#">Corporate Information</a><a href="#">Contact Us</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 StreamFlix – Built with HTML, CSS &amp; JavaScript</span>
+      <span class="footer-keys">⌨️ Press <kbd>?</kbd> for keyboard shortcuts</span>
+    </div>
+  </footer>
+
+  <!-- ══ VIDEO PLAYER MODAL ══ -->
+  <div class="player-backdrop" id="playerBackdrop">
+    <div class="player-wrap" id="playerWrap">
+      <div class="player-header">
+        <span class="player-title" id="playerTitle">Loading…</span>
+        <button class="player-close" id="playerClose">✕</button>
+      </div>
+      <div class="player-screen" id="playerScreen">
+        <!-- YouTube iframe injected here -->
+        <div class="player-loading" id="playerLoading">
+          <div class="spinner"></div>
+          <p>Loading trailer…</p>
+        </div>
+      </div>
+      <div class="player-controls">
+        <div class="player-bar-wrap">
+          <span class="player-time" id="playerTime">0:00</span>
+          <div class="player-progress" id="playerProgress">
+            <div class="player-buffered"></div>
+            <div class="player-played" id="playerPlayed"></div>
+            <div class="player-thumb" id="playerThumb"></div>
+          </div>
+          <span class="player-duration" id="playerDuration">2:30</span>
+        </div>
+        <div class="player-btns">
+          <button class="pl-btn" id="plPlay" title="Play/Pause (Space)">
+            <svg id="plPlayIcon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          </button>
+          <button class="pl-btn" id="plSkipBack" title="Skip back 10s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.69"/></svg>
+          </button>
+          <button class="pl-btn" id="plSkipFwd" title="Skip forward 10s">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-4.69"/></svg>
+          </button>
+          <div class="vol-wrap">
+            <button class="pl-btn" id="plMute" title="Mute (M)">
+              <svg id="plVolIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+            <input type="range" class="vol-slider" id="plVolume" min="0" max="100" value="80" title="Volume"/>
+          </div>
+          <div class="player-right-btns">
+            <button class="pl-btn pl-quality" id="plQuality" title="Quality">HD</button>
+            <button class="pl-btn" id="plSubtitle" title="Subtitles">CC</button>
+            <button class="pl-btn" id="plFullscreen" title="Fullscreen (F)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DETAIL MODAL ══ -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="modal">
+      <div class="modal-hero">
+        <img id="modalImg" src="" alt=""/>
+        <div class="modal-hero-overlay"></div>
+        <button class="modal-close" id="modalClose">✕</button>
+        <div class="modal-hero-actions">
+          <button class="btn btn-play modal-play-btn" id="modalPlayBtn">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            Play Trailer
+          </button>
+          <button class="modal-icon-btn" id="modalListBtn" title="Add to My List">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" id="listIcon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button class="modal-icon-btn" id="modalLikeBtn" title="Rate">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+          </button>
+          <button class="modal-icon-btn" id="modalShareBtn" title="Share">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-two-col">
+          <div class="modal-col-main">
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-meta">
+              <span class="match" id="modalMatch"></span>
+              <span id="modalYear"></span>
+              <span class="quality-badge">HD</span>
+              <span id="modalSeasons"></span>
+              <span class="rating-badge" id="modalRating"></span>
+            </div>
+            <p class="modal-desc" id="modalDesc"></p>
+          </div>
+          <div class="modal-col-side">
+            <div class="modal-detail-row">
+              <span class="detail-label">Genres:</span>
+              <span class="detail-val" id="modalGenres"></span>
+            </div>
+            <div class="modal-detail-row">
+              <span class="detail-label">Rating:</span>
+              <span class="detail-val" id="modalVote"></span>
+            </div>
+            <div class="modal-detail-row">
+              <span class="detail-label">Tags:</span>
+              <div class="modal-tags" id="modalTags"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-cast" id="modalCast"></div>
+        <div class="modal-more" id="modalMore"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ KEYBOARD SHORTCUTS PANEL ══ -->
+  <div class="shortcuts-panel" id="shortcutsPanel">
+    <div class="shortcuts-card">
+      <div class="shortcuts-header">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <button id="closeShortcuts">✕</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="shortcut"><kbd>Space</kbd><span>Play / Pause</span></div>
+        <div class="shortcut"><kbd>F</kbd><span>Fullscreen</span></div>
+        <div class="shortcut"><kbd>M</kbd><span>Mute / Unmute</span></div>
+        <div class="shortcut"><kbd>←</kbd><span>Skip back 10s</span></div>
+        <div class="shortcut"><kbd>→</kbd><span>Skip forward 10s</span></div>
+        <div class="shortcut"><kbd>↑</kbd><span>Volume up</span></div>
+        <div class="shortcut"><kbd>↓</kbd><span>Volume down</span></div>
+        <div class="shortcut"><kbd>Esc</kbd><span>Close panel</span></div>
+        <div class="shortcut"><kbd>S</kbd><span>Focus search</span></div>
+        <div class="shortcut"><kbd>T</kbd><span>Toggle theme</span></div>
+        <div class="shortcut"><kbd>?</kbd><span>Show shortcuts</span></div>
+        <div class="shortcut"><kbd>1–5</kbd><span>Navigate routes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ BACK TO TOP ══ -->
+  <button class="back-to-top" id="backToTop" title="Back to top" aria-label="Back to top">↑</button>
+
+  <script src="app.js"></script>
+</body>
+</html>

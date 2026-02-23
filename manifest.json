@@ -1,0 +1,26 @@
+{
+  "name": "StreamFlix",
+  "short_name": "StreamFlix",
+  "description": "Stream movies and TV shows anytime, anywhere.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#E50914",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/E50914/ffffff?text=SF",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/E50914/ffffff?text=SF",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["entertainment", "video"]
+}
