@@ -15,7 +15,6 @@ Example: https://streamflix-demo.netlify.app
 
 ## 📸 Screenshots
 
-_Add screenshots here (recommended):_
 
 <p align="center">
   <img src="homepage.png" width="700"/>
@@ -27,7 +26,7 @@ _Add screenshots here (recommended):_
   <img src="info.png" width="700"/>
 </p>
 
----
+
 
 ## 📁 File Structure
 
