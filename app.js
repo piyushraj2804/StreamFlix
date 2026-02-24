@@ -556,7 +556,7 @@ function createCard(movie, type = 'normal') {
   card.innerHTML = `
     ${rankHTML}
     <div class="card-inner">
-      <img class="card-img" src="${getImg(movie)}" alt="${movie.title}" loading="lazy" onerror="this.src=FALLBACK_IMG"/>
+      <img class="card-img" src="${getImg(movie)}" alt="${movie.title}" loading="lazy" onerror="this.src='https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93X2Gu3K5BVA8X.jpg'"/>
       ${progressHTML}
       <div class="card-overlay">
         <div class="card-actions">
