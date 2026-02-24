@@ -11,13 +11,11 @@
    CONFIG
 ───────────────────────────────────────────── */
 const CONFIG = {
-  // TMDb API — get your free key at https://www.themoviedb.org/settings/api
-  // For demo the app falls back to local data if no API key is set.
-  TMDB_KEY:    'YOUR_TMDB_API_KEY_HERE',
-  TMDB_BASE:   'https://api.themoviedb.org/3',
-  TMDB_IMG:    'https://image.tmdb.org/t/p/w500',
-  TMDB_BDROP:  'https://image.tmdb.org/t/p/w1280',
-  USE_TMDB:    false,   // Set to true + add your key to enable live data
+  TMDB_KEY: 'd785bded5e6745356995abc98e05b626',
+  TMDB_BASE: 'https://api.themoviedb.org/3',
+  TMDB_IMG: 'https://image.tmdb.org/t/p/original',
+  TMDB_BDROP: 'https://image.tmdb.org/t/p/original',
+  USE_TMDB: true
 };
 
 /* ─────────────────────────────────────────────
