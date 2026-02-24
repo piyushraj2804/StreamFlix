@@ -6,12 +6,7 @@ A production-grade Netflix-inspired streaming UI built with **pure HTML, CSS & J
 
 ---
 
-## 🌍 Live Demo
 
-👉 (Add your deployed link here once hosted)  
-Example: https://streamflix-demo.netlify.app
-
----
 
 ## 📸 Screenshots
 
