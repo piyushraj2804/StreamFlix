@@ -343,12 +343,25 @@ function fmtTime(s) {
    TMDB API
 ───────────────────────────────────────────── */
 async function tmdbFetch(endpoint) {
-  if (!CONFIG.USE_TMDB || CONFIG.TMDB_KEY === 'YOUR_TMDB_API_KEY_HERE') return null;
+  if (!CONFIG.USE_TMDB || !CONFIG.TMDB_KEY) return null;
+
+  const separator = endpoint.includes('?') ? '&' : '?';
+
   try {
-    const res = await fetch(`${CONFIG.TMDB_BASE}${endpoint}?api_key=${CONFIG.TMDB_KEY}&language=en-US`);
-    if (!res.ok) return null;
+    const res = await fetch(
+      `${CONFIG.TMDB_BASE}${endpoint}${separator}api_key=${CONFIG.TMDB_KEY}&language=en-US`
+    );
+
+    if (!res.ok) {
+      console.error('TMDB Error:', res.status);
+      return null;
+    }
+
     return await res.json();
-  } catch { return null; }
+  } catch (err) {
+    console.error('Fetch failed:', err);
+    return null;
+  }
 }
 
 function normalizeTmdb(item, type = 'movie') {
@@ -364,10 +377,20 @@ function normalizeTmdb(item, type = 'movie') {
     overview:     item.overview,
     poster_path:  item.poster_path ? CONFIG.TMDB_IMG + item.poster_path : '',
     backdrop_path:item.backdrop_path ? CONFIG.TMDB_BDROP + item.backdrop_path : '',
-    trailerKey:   '',
+    trailerKey:   null,
     tags:         [],
     type:         isTV ? 'tv' : 'movie',
   };
+}
+async function fetchTrailer(id, type = 'movie') {
+  const data = await tmdbFetch(`/${type}/${id}/videos`);
+  if (!data || !data.results) return '';
+
+  const trailer = data.results.find(
+    v => v.type === 'Trailer' && v.site === 'YouTube'
+  );
+
+  return trailer ? trailer.key : '';
 }
 
 const GENRE_MAP = {
@@ -402,6 +425,11 @@ async function loadData() {
   const norm = (data, type) => data?.results?.map(i => normalizeTmdb(i, type)) || null;
 
   STATE.allData    = norm(trending, 'movie')   || LOCAL_MOVIES;
+  if (STATE.allData && CONFIG.USE_TMDB) {
+  for (let item of STATE.allData.slice(0, 5)) {
+    item.trailerKey = await fetchTrailer(item.id, item.type);
+  }
+}
   STATE.movies     = norm(popular, 'movie')    || LOCAL_MOVIES.filter(m => m.type === 'movie');
   STATE.tvShows    = norm(tvPopular, 'tv')     || LOCAL_MOVIES.filter(m => m.type === 'tv');
   STATE.topRated   = norm(topRated, 'movie')   || shuffle(LOCAL_MOVIES);

@@ -342,7 +342,8 @@ ul { list-style:none; }
 }
 .card:hover { transform:scale(1.24) translateY(-10px); z-index:200; transition:transform 0.35s var(--ease),z-index 0s; }
 .card-inner { width:100%; height:100%; border-radius:var(--radius-md); overflow:hidden; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.5); }
-.card-img { width:100%; height:100%; object-fit:cover; transition:transform 0.35s ease; }
+.card-img { width:100%; height:100%; object-fit:contain;
+background:#000; transition:transform 0.35s ease; }
 .card:hover .card-img { transform:scale(1.06); }
 .card-overlay {
   position:absolute; inset:0;
@@ -372,17 +373,36 @@ ul { list-style:none; }
 
 /* Wide (continue watching) */
 .card.wide { width:255px; height:144px; }
+.card.wide .card-img {
+  object-fit: cover;
+  object-position: center;
+}
 .card.wide .card-overlay { background:linear-gradient(to top,rgba(0,0,0,0.92) 0%,transparent 80%); }
+
 .progress-bar { position:absolute; bottom:0; left:0; right:0; height:3px; background:rgba(255,255,255,0.15); z-index:5; }
 .progress-fill { height:100%; background:var(--red); border-radius:0 2px 2px 0; box-shadow:0 0 6px var(--red-glow); }
 
 /* Top 10 */
 .card.top10 { width:220px; }
 .card-rank {
-  position:absolute; bottom:-14px; left:-10px;
-  font-family:'Bebas Neue',sans-serif; font-size:7.5rem; line-height:1;
-  color:transparent; -webkit-text-stroke:3px rgba(255,255,255,0.12);
-  z-index:1; pointer-events:none; user-select:none;
+  position: absolute;
+  bottom: -18px;
+  left: -6px;
+
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8.5rem;
+  line-height: 1;
+
+  color: rgba(255,255,255,0.9);
+  -webkit-text-stroke: 2px rgba(0,0,0,0.6);
+
+  text-shadow:
+    0 0 20px rgba(0,0,0,0.6),
+    0 0 40px rgba(0,0,0,0.4);
+
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ══════════════════════════════════════════════
